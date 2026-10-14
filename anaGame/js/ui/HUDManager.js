@@ -215,7 +215,7 @@ window.flashHitMarker = function (isHeal = false) {
     }, 180);
 };
 
-// View Mode Transition ('tps' | 'fps' | 'pose')
+// View Mode Transition ('tps' | 'fps')
 window.setViewMode = function (mode) {
     const player = window.player;
     if (!player) return;
@@ -223,58 +223,42 @@ window.setViewMode = function (mode) {
     if (player.isScoped && window.toggleScope) {
         window.toggleScope(false);
     }
-    player.viewMode = mode;
+    // Default to 'tps' if unknown
+    player.viewMode = (mode === 'fps') ? 'fps' : 'tps';
 
     const btnTps = document.getElementById('btn-cam-tps');
     const btnFps = document.getElementById('btn-cam-fps');
-    const btnPose = document.getElementById('btn-cam-pose');
-    const poseBanner = document.getElementById('pose-showcase-banner');
     const chLayer = document.getElementById('crosshair-layer');
 
     if (btnTps) {
-        btnTps.className = mode === 'tps'
+        btnTps.className = player.viewMode === 'tps'
             ? 'px-3 py-1.5 rounded-lg text-xs font-bold bg-blue-600 text-white border border-blue-400 shadow'
             : 'px-3 py-1.5 rounded-lg text-xs font-bold bg-slate-800/90 text-slate-200 border border-slate-600';
     }
     if (btnFps) {
-        btnFps.className = mode === 'fps'
+        btnFps.className = player.viewMode === 'fps'
             ? 'px-3 py-1.5 rounded-lg text-xs font-bold bg-blue-600 text-white border border-blue-400 shadow'
             : 'px-3 py-1.5 rounded-lg text-xs font-bold bg-slate-800/90 text-slate-200 border border-slate-600';
-    }
-    if (btnPose) {
-        btnPose.className = mode === 'pose'
-            ? 'px-3 py-1.5 rounded-lg text-xs font-bold bg-amber-400 text-slate-950 border border-white shadow'
-            : 'px-3 py-1.5 rounded-lg text-xs font-bold bg-amber-500/90 text-slate-950 border border-amber-300';
     }
 
     const anaModel = window.anaModel;
     const fpsViewModel = window.fpsViewModel;
 
-    if (mode === 'pose') {
-        if (document.exitPointerLock) document.exitPointerLock();
-        if (poseBanner) poseBanner.classList.remove('hidden');
-        if (chLayer) chLayer.classList.add('hidden');
-        if (anaModel) anaModel.root.visible = true;
-        if (fpsViewModel) fpsViewModel.root.visible = false;
-        player.poseOrbitYaw = -0.62;
-        player.poseOrbitPitch = 0.04;
-        player.poseZoomDist = 1.85;
+    if (chLayer) chLayer.classList.remove('hidden');
+    if (anaModel) anaModel.root.visible = (player.viewMode === 'tps');
+    if (fpsViewModel) fpsViewModel.root.visible = (player.viewMode === 'fps' && !player.isScoped);
+
+    if (player.viewMode === 'fps') {
         window.showCombatCallout(
-            '🏔️ 원작 화보 구도 시점',
-            '드래그로 360° 회전 / 스킬키(Shift·E·Q·R)로 아나의 전신 모션을 감상하세요!',
-            'border-amber-400 text-amber-300'
+            '🔫 1인칭 전투 시점 활성화',
+            '사격 시 노리쇠 왕복, Shift 수면총 권총, E 수류탄 투척, R 재장전 손 모션이 작동합니다!',
+            'border-cyan-400 text-cyan-300'
         );
     } else {
-        if (poseBanner) poseBanner.classList.add('hidden');
-        if (chLayer) chLayer.classList.remove('hidden');
-        if (anaModel) anaModel.root.visible = (mode === 'tps');
-        if (fpsViewModel) fpsViewModel.root.visible = (mode === 'fps' && !player.isScoped);
-        if (mode === 'fps') {
-            window.showCombatCallout(
-                '🔫 1인칭 전투 시점 활성화',
-                '사격 시 노리쇠 왕복, Shift 수면총 권총, E 수류탄 투척, R 재장전 손 모션이 작동합니다!',
-                'border-cyan-400 text-cyan-300'
-            );
-        }
+        window.showCombatCallout(
+            '🎯 3인칭 숄더뷰 전투 시점 활성화',
+            '마우스 클릭으로 사격/치유, 우클릭 저격 조준경을 사용하세요!',
+            'border-blue-400 text-blue-300'
+        );
     }
 };

@@ -7,7 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@500;700;900&family=Orbitron:ital,wght@0,700;0,900;1,800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/game.css">
+    <link rel="stylesheet" href="./css/game.css">
 </head>
 <body class="relative select-none text-white">
 
@@ -208,14 +208,11 @@
                 <button id="btn-toggle-touch" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-cyan-600/90 text-white border border-cyan-400 shadow hover:bg-cyan-500 transition">
                     📱 모바일 컨트롤러 ON
                 </button>
-                <button id="btn-cam-tps" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-slate-800/90 text-slate-200 border border-slate-600 hover:bg-slate-700 transition">
+                <button id="btn-cam-tps" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-blue-600 text-white border border-blue-400 shadow transition">
                     🎥 3인칭 (V)
                 </button>
                 <button id="btn-cam-fps" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-slate-800/90 text-slate-200 border border-slate-600 hover:bg-slate-700 transition">
                     🔫 1인칭
-                </button>
-                <button id="btn-cam-pose" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-amber-400 text-slate-950 border border-white shadow hover:bg-amber-300 transition">
-                    🏔️ 원작 포즈 (C)
                 </button>
                 <button id="btn-fill-ult" class="px-2.5 py-1.5 rounded-lg text-xs font-bold bg-sky-500/20 text-sky-300 border border-sky-400/50 hover:bg-sky-500/40 transition">
                     ⚡ 나노 충전
@@ -386,28 +383,15 @@
         </div>
     </div>
 
-    <!-- Original Photo Pose Showcase Banner -->
-    <div id="pose-showcase-banner" class="fixed top-20 left-1/2 -translate-x-1/2 bg-slate-900/90 border border-amber-400/80 px-5 py-2.5 rounded-2xl backdrop-blur-md shadow-2xl z-30 text-center pointer-events-auto">
-        <div class="text-amber-300 font-black text-xs sm:text-sm">🏔️ 원작 화보 구도 시점 (마우스 드래그: 360° 회전 / 휠: 줌 / 좌클릭·Shift·E·Q: 즉시 사격 및 스킬 시연!)</div>
-        <div class="flex items-center justify-center gap-2 mt-1.5">
-            <button id="btn-reset-photo-angle" class="px-3 py-1 bg-amber-400 hover:bg-amber-300 text-slate-950 text-xs font-black rounded-lg transition">
-                📸 사진 원본 각도로 정렬
-            </button>
-            <button id="btn-exit-pose" class="px-3 py-1 bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold rounded-lg transition">
-                🎯 3인칭 숄더뷰 전투 시점으로 전환 (V / C)
-            </button>
-        </div>
-    </div>
-
     <!-- Modular Game Architecture Scripts -->
-    <script src="js/core/SoundSynthesizer.js"></script>
-    <script src="js/entities/AnaModelBuilder.js"></script>
-    <script src="js/systems/GrowthStatSystem.js"></script>
-    <script src="js/entities/TrainingBot.js"></script>
-    <script src="js/ui/HUDManager.js"></script>
-    <script src="js/combat/CombatSystem.js"></script>
-    <script src="js/controls/MobileTouchController.js"></script>
-    <script src="js/controls/InputHandler.js"></script>
-    <script src="js/core/GameEngine.js"></script>
+    <script src="./js/core/SoundSynthesizer.js"></script>
+    <script src="./js/entities/AnaModelBuilder.js"></script>
+    <script src="./js/systems/GrowthStatSystem.js"></script>
+    <script src="./js/entities/TrainingBot.js"></script>
+    <script src="./js/ui/HUDManager.js"></script>
+    <script src="./js/combat/CombatSystem.js"></script>
+    <script src="./js/controls/MobileTouchController.js"></script>
+    <script src="./js/controls/InputHandler.js"></script>
+    <script src="./js/core/GameEngine.js"></script>
 </body>
 </html>

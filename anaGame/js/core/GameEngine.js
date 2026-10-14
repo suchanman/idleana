@@ -5,8 +5,8 @@
 
 // 1. Scene, Camera, Renderer Setup
 window.scene = new THREE.Scene();
-window.scene.background = new THREE.Color(0xcbdcf7);
-window.scene.fog = new THREE.FogExp2(0xcbdcf7, 0.011);
+window.scene.background = new THREE.Color(0x5b8ec9);
+window.scene.fog = new THREE.FogExp2(0x73a2db, 0.009);
 
 const canvas = document.getElementById('game-canvas');
 window.renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
@@ -449,17 +449,8 @@ window.updateSimulation = function (dt) {
         fpsViewModel.root.visible = false;
     }
 
-    // 6. Camera Placement
-    if (player.viewMode === 'pose') {
-        const focusPoint = player.pos.clone().add(new THREE.Vector3(-0.22, 1.24, -0.28));
-        const dist = player.poseZoomDist;
-        camera.position.set(
-            focusPoint.x + Math.sin(player.poseOrbitYaw) * Math.cos(player.poseOrbitPitch) * dist,
-            focusPoint.y + Math.sin(player.poseOrbitPitch) * dist,
-            focusPoint.z + Math.cos(player.poseOrbitYaw) * Math.cos(player.poseOrbitPitch) * dist
-        );
-        camera.lookAt(focusPoint);
-    } else if (player.viewMode === 'fps' || player.isScoped) {
+    // 6. Camera Placement (TPS Over-the-Shoulder / FPS)
+    if (player.viewMode === 'fps' || player.isScoped) {
         const eyePos = player.pos.clone().add(new THREE.Vector3(0, 1.56, 0));
         camera.position.copy(eyePos);
         const lookTarget = eyePos.clone().add(new THREE.Vector3(
@@ -469,6 +460,7 @@ window.updateSimulation = function (dt) {
         ));
         camera.lookAt(lookTarget);
     } else {
+        // TPS Over-the-Shoulder View (Optimal battlefield visibility)
         const rightOffset = new THREE.Vector3(Math.cos(player.yaw), 0, -Math.sin(player.yaw)).multiplyScalar(0.68);
         const forwardDir = new THREE.Vector3(
             -Math.sin(player.yaw) * Math.cos(player.pitch),
@@ -517,7 +509,7 @@ window.updateSimulation = function (dt) {
     }
 
     // Real-time Smart-Aim Guide feedback
-    if (player.viewMode !== 'pose' && window.checkSmartAimTarget && window.getAimRay) {
+    if (window.checkSmartAimTarget && window.getAimRay) {
         window.checkSmartAimTarget(window.getAimRay());
     }
 };
@@ -529,23 +521,32 @@ window.animateLoop = function () {
     window.renderer.render(window.scene, window.camera);
 };
 
+let isGameInitialized = false;
 window.initGame = function () {
+    if (isGameInitialized) return;
+    isGameInitialized = true;
+
     window.sfx = new AnaSoundEngine();
     window.buildSnowyRangeEnvironment();
     window.initDefaultBots();
     window.initMobileTouchController();
     window.initInputHandler();
+    if (window.setViewMode) window.setViewMode('tps');
     window.updatePlayerHud();
 
     window.showCombatCallout(
         '🏔️ [Project: BIOTIC VANGUARD] 1단계 작전 개시!',
-        '적 처치 시 ATK 영구 상승! / 아군 치유 시 MAX HP 영구 상승 & 오버힐 보호막 충전! (M키: 모바일 컨트롤러)',
+        '화면 클릭으로 조준 활성화 / 적 처치 시 ATK 영구 상승 / 아군 치유 시 MAX HP 영구 상승!',
         'border-cyan-400 text-cyan-300'
     );
 
     window.animateLoop();
 };
 
-window.addEventListener('DOMContentLoaded', () => {
+// Immediate start if DOM already loaded (solves network/GitHub Pages timing)
+if (document.readyState === 'complete' || document.readyState === 'interactive') {
     window.initGame();
-});
+} else {
+    window.addEventListener('DOMContentLoaded', window.initGame);
+}
+window.addEventListener('load', window.initGame);

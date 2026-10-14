@@ -19,7 +19,7 @@ window.player = {
     baseReloadTime: 1.35,
     veteranTier: 0,
     isScoped: false,
-    viewMode: 'pose', // 'tps' | 'fps' | 'pose'
+    viewMode: 'tps', // 'tps' | 'fps'
     fireCooldown: 0,
     recoilOffset: 0,
     shootAnimTimer: 0,
